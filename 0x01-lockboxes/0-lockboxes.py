@@ -1,33 +1,37 @@
 #!/usr/bin/python3
-'''LockBoxes Challenge'''
+"""
+Module for determining if all locked boxes can be opened
+"""
 
 
 def canUnlockAll(boxes):
-    '''determines if all the boxes can be opened or not
+    """
+    Determines if all the boxes can be opened
+
+    Args:
+        boxes (list of lists): A list of boxes where each box may contain keys to other boxes
+                              Box i contains a key to box j if boxes[i] contains j
+
     Returns:
-        True: all boxes can be opened
-        False: not all boxes can be opened
-    '''
+        bool: True if all boxes can be opened, False otherwise
+    """
     n = len(boxes)
-    if n == 0:
-        return True
-    
-    # Keep track of boxes we can open
+    # Keep track of which boxes we can open
     unlocked = [False] * n
-    unlocked[0] = True  # Box 0 is unlocked by default
+    unlocked[0] = True  # First box is already unlocked
     
-    # Keys we have access to
-    keys = boxes[0].copy()
+    # Stack to keep track of keys to process
+    keys_to_check = [0]  # Start with the first box
     
-    # Try to open new boxes
-    while keys:
-        key = keys.pop()
+    while keys_to_check:
+        current_box = keys_to_check.pop()
         
-        # If key is valid and box is not already unlocked
-        if 0 <= key < n and not unlocked[key]:
-            unlocked[key] = True
-            # Add new keys from this box
-            keys.extend([k for k in boxes[key] if not unlocked[k]])
+        # Check each key in the current box
+        for key in boxes[current_box]:
+            # If the key opens a box we haven't unlocked yet and is within range
+            if key < n and not unlocked[key]:
+                unlocked[key] = True
+                keys_to_check.append(key)
     
     # Check if all boxes are unlocked
     return all(unlocked)
