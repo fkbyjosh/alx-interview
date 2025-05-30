@@ -14,7 +14,7 @@ if (!movieId) {
 const filmUrl = `https://swapi-api.alx-tools.com/api/films/${movieId}/`;
 
 // Function to make HTTP request and return a promise
-function makeRequest(url) {
+function makeRequest (url) {
   return new Promise((resolve, reject) => {
     request(url, (error, response, body) => {
       if (error) {
@@ -29,14 +29,14 @@ function makeRequest(url) {
 }
 
 // Main function to fetch and display characters
-async function getCharacters() {
+async function getCharacters () {
   try {
     // Get film data
     const filmData = await makeRequest(filmUrl);
-    
+
     // Get character URLs from the film
     const characterUrls = filmData.characters;
-    
+
     // Fetch each character's data in order and print names
     for (const characterUrl of characterUrls) {
       try {
@@ -51,4 +51,6 @@ async function getCharacters() {
     process.exit(1);
   }
 }
+
+// Run the script
 getCharacters();
