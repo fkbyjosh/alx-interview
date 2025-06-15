@@ -1,44 +1,20 @@
 #!/usr/bin/python3
-"""
-Making Change - Dynamic Programming Solution
-"""
+"""Module to find the fewest number of coins needed to meet a given total"""
 
 
 def makeChange(coins, total):
-    """
-    Determine the fewest number of coins needed to meet a given amount total.
-
-    Args:
-        coins: List of coin values (integers > 0)
-        total: Target amount to make
-
-    Returns:
-        Fewest number of coins needed to meet total
-        0 if total is 0 or less
-        -1 if total cannot be met by any number of coins
-    """
+    """Determine the minimum number of coins to make up a total"""
     if total <= 0:
         return 0
-    
     if not coins:
         return -1
 
-    # Sort coins in descending order for potential early optimization
-    coins = sorted(set(coins), reverse=True)
-
-    # Initialize dp array with infinity for all amounts except 0
-    # dp[i] represents minimum coins needed to make amount i
+    # Initialize dp array with inf values
     dp = [float('inf')] * (total + 1)
-    dp[0] = 0  # 0 coins needed to make amount 0
+    dp[0] = 0  # Base case
 
-    # For each amount from 1 to total
-    for amount in range(1, total + 1):
-        # Try each coin
-        for coin in coins:
-            # If coin value is not greater than current amount
-            if coin <= amount and dp[amount - coin] != float('inf'):
-                # Update minimum coins needed for this amount
-                dp[amount] = min(dp[amount], dp[amount - coin] + 1)
+    for coin in coins:
+        for x in range(coin, total + 1):
+            dp[x] = min(dp[x], dp[x - coin] + 1)
 
-    # Return result: -1 if impossible, otherwise minimum coins needed
-    return -1 if dp[total] == float('inf') else dp[total]
+    return dp[total] if dp[total] != float('inf') else -1
