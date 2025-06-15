@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-Making Change - Dynamic Programming Solution
+Making Change - Naive Recursive Solution (for comparison)
+This solution may have poor performance on large inputs
 """
 
 
@@ -19,20 +20,20 @@ def makeChange(coins, total):
     """
     if total <= 0:
         return 0
-    
-    # Initialize dp array with infinity for all amounts except 0
-    # dp[i] represents minimum coins needed to make amount i
-    dp = [float('inf')] * (total + 1)
-    dp[0] = 0  # 0 coins needed to make amount 0
-    
-    # For each amount from 1 to total
-    for amount in range(1, total + 1):
-        # Try each coin
+
+    def helper(remaining):
+        if remaining == 0:
+            return 0
+        if remaining < 0:
+            return float('inf')
+        
+        min_coins = float('inf')
         for coin in coins:
-            # If coin value is not greater than current amount
-            if coin <= amount:
-                # Update minimum coins needed for this amount
-                dp[amount] = min(dp[amount], dp[amount - coin] + 1)
-    
-    # Return result: -1 if impossible, otherwise minimum coins needed
-    return -1 if dp[total] == float('inf') else dp[total]
+            result = helper(remaining - coin)
+            if result != float('inf'):
+                min_coins = min(min_coins, result + 1)
+
+        return min_coins
+
+    result = helper(total)
+    return -1 if result == float('inf') else result
